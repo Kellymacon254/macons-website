@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macons Creatives - Creative Power Meets Digital Precision</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 50%, rgba(236, 72, 153, 0.1) 100%);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .testimonial-card {
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: scale(1.03);
+        }
+        
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: scale(1.2);
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white shadow-md z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-2xl font-bold gradient-text">MACONS CREATIVES</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Home</a>
+                    <a href="#services" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Services</a>
+                    <a href="#testimonials" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Testimonials</a>
+                    <a href="#contact" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Contact</a>
+                    <a href="#quote" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full font-medium hover:shadow-lg transition-all duration-300">Get Quote</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="menu-btn" class="text-gray-700 hover:text-blue-600 focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Home</a>
+                <a href="#services" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Services</a>
+                <a href="#testimonials" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Testimonials</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">Contact</a>
+                <a href="#quote" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:shadow-lg">Get Quote</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient pt-24 pb-20 md:pt-32 md:pb-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight mb-6">
+                        Creative Power Meets <span class="gradient-text">Digital Precision</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-600 mb-8">
+                        We bring your brand to life through impactful graphic design, digital solutions, and printing services. Whether you're an individual, startup, business, school, or church — we design with purpose and deliver with passion.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#services" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-full font-medium text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                            Explore Our Services
+                        </a>
+                        <a href="#quote" class="bg-white text-gray-800 px-8 py-3 rounded-full font-medium text-center border-2 border-blue-500 hover:bg-blue-50 transition-all duration-300 transform hover:-translate-y-1">
+                            Get a Free Quote
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative w-full max-w-md">
+                        <div class="absolute -top-10 -left-10 w-32 h-32 bg-purple-200 rounded-full opacity-50 animate-pulse"></div>
+                        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-200 rounded-full opacity-50 animate-pulse"></div>
+                        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Creative Design" class="relative z-10 rounded-2xl shadow-2xl floating">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12">
+                Why Choose <span class="gradient-text">Macons Creatives</span>
+            </h2>
+            
+            <div class="bg-gradient-to-r from-blue-800 to-purple-800 rounded-xl p-8 mb-12 shadow-2xl">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/4 mb-6 md:mb-0 flex justify-center">
+                        <div class="w-32 h-32 rounded-full bg-white flex items-center justify-center shadow-lg">
+                            <i class="fas fa-user-tie text-5xl text-blue-800"></i>
+                        </div>
+                    </div>
+                    <div class="md:w-3/4 text-center md:text-left">
+                        <h3 class="text-2xl md:text-3xl font-bold text-white mb-2">Leadership</h3>
+                        <p class="text-xl text-blue-100 font-medium mb-4">
+                            C.E.O & IT Solutions Expert <span class="text-yellow-300">Kelly Macon</span>
+                        </p>
+                        <p class="text-white opacity-90">
+                            Founder of Macons Creatives | Digital Transformation Specialist | 
+                            Certified IT Professional with over 10 years of experience in 
+                            delivering cutting-edge creative and technological solutions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-lightbulb text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Custom, Professional Designs</h3>
+                    <p class="text-gray-600">Tailored solutions that perfectly match your brand identity</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 text-center">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-clock text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Fast Turnaround</h3>
+                    <p class="text-gray-600">Quick delivery without compromising on quality</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 text-center">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-brain text-pink-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Expert Digital Solutions</h3>
+                    <p class="text-gray-600">Cutting-edge web and digital services</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 text-center">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-headset text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">One-on-One Support</h3>
+                    <p class="text-gray-600">Personalized attention throughout your project</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-star text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Satisfaction Guaranteed</h3>
+                    <p class="text-gray-600">We work until you're completely happy</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">
+                Creative Design & Digital Solutions That <span class="gradient-text">Make You Stand Out</span>
+            </h2>
+            <p class="text-lg text-center text-gray-600 max-w-3xl mx-auto mb-12">
+                At Macons Creatives, we offer professional, affordable design and web services that help you grow your brand and communicate your ideas effectively.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="service-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+                    <div class="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-id-card text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Business Cards & Flyers</h3>
+                    <p class="text-gray-600 mb-4">We design professional and modern cards & flyers that showcase your brand, event, or business in style.</p>
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-blue-500 mr-2"></i> Personalization</p>
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-blue-500 mr-2"></i> Custom layout</p>
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-blue-500 mr-2"></i> Print-ready files</p>
+                    </div>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="service-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+                    <div class="w-14 h-14 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-image text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Posters, Banners & Brochures</h3>
+                    <p class="text-gray-600 mb-4">From event posters to funeral banners and tri-fold brochures, we create high-quality designs that inform and attract.</p>
+                    <div class="bg-purple-50 rounded-lg p-4">
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-purple-500 mr-2"></i> All sizes</p>
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-purple-500 mr-2"></i> Ready for print</p>
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-purple-500 mr-2"></i> Social media ready</p>
+                    </div>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="service-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+                    <div class="w-14 h-14 bg-pink-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-palette text-pink-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Logo & Brand Identity</h3>
+                    <p class="text-gray-600 mb-4">Your logo is your brand's fingerprint. We create unique, memorable logos and identity kits (colors, fonts, icons).</p>
+                    <div class="bg-pink-50 rounded-lg p-4">
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-pink-500 mr-2"></i> Logo concepts</p>
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-pink-500 mr-2"></i> Final files</p>
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-pink-500 mr-2"></i> Optional brand guide</p>
+                    </div>
+                </div>
+                
+                <!-- Service 4 -->
+                <div class="service-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+                    <div class="w-14 h-14 bg-indigo-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-globe text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Website Design & Hosting</h3>
+                    <p class="text-gray-600 mb-4">Get a clean, responsive website for your business, church, or project. Hosting and domain setup included if needed.</p>
+                    <div class="bg-indigo-50 rounded-lg p-4">
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-indigo-500 mr-2"></i> Mobile-friendly design</p>
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-indigo-500 mr-2"></i> SEO optimized</p>
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-indigo-500 mr-2"></i> Google Maps integration</p>
+                    </div>
+                </div>
+                
+                <!-- Service 5 -->
+                <div class="service-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+                    <div class="w-14 h-14 bg-green-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-file-alt text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Company Profiles & Presentations</h3>
+                    <p class="text-gray-600 mb-4">We craft pitch decks, tender profiles, and branded documents for your clients and stakeholders.</p>
+                    <div class="bg-green-50 rounded-lg p-4">
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-green-500 mr-2"></i> Editable PPT</p>
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-green-500 mr-2"></i> Final PDF</p>
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-green-500 mr-2"></i> Professional layouts</p>
+                    </div>
+                </div>
+                
+                <!-- Service 6 -->
+                <div class="service-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+                    <div class="w-14 h-14 bg-yellow-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-share-alt text-yellow-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Social Media Graphics & Content</h3>
+                    <p class="text-gray-600 mb-4">We design scroll-stopping content for Facebook, Instagram, TikTok & more — templates, stories, reels, and ads.</p>
+                    <div class="bg-yellow-50 rounded-lg p-4">
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-yellow-500 mr-2"></i> Monthly packs</p>
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-yellow-500 mr-2"></i> One-time projects</p>
+                        <p class="text-sm text-gray-700 font-medium"><i class="fas fa-check-circle text-yellow-500 mr-2"></i> Platform-specific designs</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <a href="#quote" class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-full font-medium hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                    Request Custom Package
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">
+                What Our <span class="gradient-text">Clients Say</span>
+            </h2>
+            <p class="text-lg text-center text-gray-600 max-w-3xl mx-auto mb-12">
+                Don't just take our word for it. Here's what our satisfied clients have to say about their experience with Macons Creatives.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                            <i class="fas fa-user text-blue-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-bold text-gray-800">George O.</h4>
+                            <p class="text-sm text-gray-600">Nairobi</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "Macons Creatives helped me launch my brand professionally. The results were beyond my expectations."
+                    </p>
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+                            <i class="fas fa-user text-purple-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-bold text-gray-800">Sharon K.</h4>
+                            <p class="text-sm text-gray-600">Eldoret</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "Super creative and always on time. I recommend them to anyone who wants quality designs."
+                    </p>
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center">
+                            <i class="fas fa-user text-pink-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-bold text-gray-800">Pastor Kipchumba</h4>
+                            <p class="text-sm text-gray-600">Kapsabet</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "They designed our church posters and built our website. Highly recommended!"
+                    </p>
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 4 -->
+                <div class="testimonial-card bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                            <i class="fas fa-user text-green-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-bold text-gray-800">Evans R.</h4>
+                            <p class="text-sm text-gray-600">Nandi County</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">
+                        "I had all my business cards, flyers, and website done with them. Smooth experience!"
+                    </p>
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row gap-12">
+                <div class="lg:w-1/2">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                        Let's Work <span class="gradient-text">Together</span>
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Have an idea? Need a design or website? Let's bring it to life!
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <i class="fas fa-map-marker-alt text-blue-600"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-800">Location</h4>
+                                <p class="text-gray-600">Nandi County, Kenya</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                                    <i class="fas fa-phone-alt text-purple-600"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-800">Phone/WhatsApp</h4>
+                                <p class="text-gray-600">+254 701 396 835</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center">
+                                    <i class="fas fa-envelope text-pink-600"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-800">Email</h4>
+                                <p class="text-gray-600">kellykipkemboi2@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                                    <i class="fas fa-clock text-indigo-600"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-800">Business Hours</h4>
+                                <p class="text-gray-600">Monday – Saturday: 8:00 AM – 6:00 PM</p>
+                                <p class="text-gray-600">Sunday: Closed</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                                    <i class="fas fa-share-alt text-green-600"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-800">Social Media</h4>
+                                <div class="flex space-x-4 mt-2">
+                                    <a href="#" class="social-icon text-blue-600 hover:text-blue-800">
+                                        <i class="fab fa-facebook-f text-xl"></i>
+                                    </a>
+                                    <a href="#" class="social-icon text-pink-600 hover:text-pink-800">
+                                        <i class="fab fa-instagram text-xl"></i>
+                                    </a>
+                                    <a href="#" class="social-icon text-blue-400 hover:text-blue-600">
+                                        <i class="fab fa-twitter text-xl"></i>
+                                    </a>
+                                    <a href="#" class="social-icon text-red-500 hover:text-red-700">
+                                        <i class="fab fa-tiktok text-xl"></i>
+                                    </a>
+                                    <a href="#" class="social-icon text-blue-500 hover:text-blue-700">
+                                        <i class="fab fa-telegram text-xl"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="https://wa.me/254701396835" class="bg-green-500 text-white px-6 py-3 rounded-full font-medium text-center hover:bg-green-600 transition-all duration-300 flex items-center justify-center">
+                            <i class="fab fa-whatsapp mr-2 text-xl"></i> Chat on WhatsApp
+                        </a>
+                        <a href="#quote" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full font-medium text-center hover:shadow-lg transition-all duration-300">
+                            Request a Quote
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <div id="quote" class="bg-white p-8 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6">
+                            Send Us a Message or Upload Your Project Brief
+                        </h3>
+                        <p class="text-gray-600 mb-6">
+                            Use this form to send your request, ask a question, or upload your project description or file. We'll respond as soon as possible.
+                        </p>
+                        
+                        <form class="space-y-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                <input type="text" id="name" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                            </div>
+                            
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input type="email" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                            </div>
+                            
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                                <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                            </div>
+                            
+                            <div>
+                                <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                                <input type="text" id="subject" name="subject" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                            </div>
+                            
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Your Message</label>
+                                <textarea id="message" name="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
+                            </div>
+                            
+                            <div>
+                                <label for="file" class="block text-sm font-medium text-gray-700 mb-1">Upload File (optional)</label>
+                                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg">
+                                    <div class="space-y-1 text-center">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                        <div class="flex text-sm text-gray-600">
+                                            <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                                <span>Upload a file</span>
+                                                <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                                            </label>
+                                            <p class="pl-1">or drag and drop</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500">
+                                            DOC, PDF, PNG, JPG up to 10MB
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="pt-2">
+                                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center">
+                                    <i class="fas fa-paper-plane mr-2"></i> Submit Message
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <div class="flex items-center mb-4">
+                        <h3 class="text-2xl font-bold gradient-text">MACONS CREATIVES</h3>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        Creative Power Meets Digital Precision. We bring your brand to life through impactful graphic design, digital solutions, and printing services.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="social-icon text-gray-300 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon text-gray-300 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon text-gray-300 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon text-gray-300 hover:text-white">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                        <a href="#" class="social-icon text-gray-300 hover:text-white">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-300 hover:text-white transition">Home</a></li>
+                        <li><a href="#services" class="text-gray-300 hover:text-white transition">Services</a></li>
+                        <li><a href="#testimonials" class="text-gray-300 hover:text-white transition">Testimonials</a></li>
+                        <li><a href="#contact" class="text-gray-300 hover:text-white transition">Contact</a></li>
+                        <li><a href="#quote" class="text-gray-300 hover:text-white transition">Get Quote</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-2 text-gray-300"></i>
+                            <span class="text-gray-300">Nandi County, Kenya</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt mt-1 mr-2 text-gray-300"></i>
+                            <span class="text-gray-300">+254 701 396 835</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-2 text-gray-300"></i>
+                            <span class="text-gray-300">kellykipkemboi2@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-300 text-sm">
+                    © 2025 Macons Creatives. All rights reserved.
+                </p>
+                <div class="mt-4 md:mt-0">
+                    <a href="#" class="text-gray-300 hover:text-white text-sm mr-4">Privacy Policy</a>
+                    <a href="#" class="text-gray-300 hover:text-white text-sm">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/254701396835" class="fixed bottom-6 right-6 bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition-all duration-300 z-50">
+        <i class="fab fa-whatsapp text-2xl"></i>
+    </a>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="hidden fixed bottom-6 left-6 bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-blue-700 transition-all duration-300 z-50">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close mobile menu when clicking a link
+        const mobileLinks = document.querySelectorAll('#mobile-menu a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // Back to top button
+        const backToTopBtn = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.remove('hidden');
+            } else {
+                backToTopBtn.classList.add('hidden');
+            }
+        });
+        
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const offset = 80; // Adjust for fixed header
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - offset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Animation on scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.service-card, .testimonial-card');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+                
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+        
+        // Set initial state for animation
+        document.querySelectorAll('.service-card, .testimonial-card').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            element.style.transition = 'all 0.6s ease';
+        });
+        
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+    </script>
+</body>
+</html>
