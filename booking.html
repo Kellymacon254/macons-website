@@ -542,9 +542,10 @@
 
                 try {
                     // ============================================================
-                    // ✅ UPDATED: Your new Google Apps Script URL
+                    // ✅ UPDATED: Your NEW Google Apps Script URL (Fixed)
                     // ============================================================
-              const API_URL = 'https://script.google.com/macros/s/AKfycbwzBst7kub1o-Ap4sRDcb_yBUSHjP-vwhg26hrE-YVXnorOdOZ5OA1B-hK46fCNAhHS/exec';
+                    const API_URL = 'https://script.google.com/macros/s/AKfycbwWHZSEmkLNIFIaqj4SIx8MLe8qVybR9A2D9wunfV_-zhAQc_aUEPWti2H99OHN2X5t/exec';
+                    
                     const response = await fetch(API_URL, {
                         method: 'POST',
                         headers: {
@@ -581,6 +582,7 @@
 
             console.log('✅ Macons Creatives booking page ready.');
             console.log('📌 Connected to Google Apps Script:');
+            // UPDATED LOG to match the new URL
             console.log('📌 https://script.google.com/macros/s/AKfycbwWHZSEmkLNIFIaqj4SIx8MLe8qVybR9A2D9wunfV_-zhAQc_aUEPWti2H99OHN2X5t/exec');
         })();
     </script>
