@@ -446,6 +446,39 @@
     <!-- Toast error -->
     <div class="toast" id="toast"></div>
 
+    <!-- ===== JSONP CALLBACK FUNCTION ===== -->
+    <script>
+        // This function will be called automatically by the backend response
+        function myFunction(data) {
+            console.log("✅ JSONP Response from backend:", data);
+            
+            // Handle the response
+            if (data && data.status === 'success') {
+                const ticket = data.ticket || 'MC-' + Date.now().toString().slice(-6);
+                document.getElementById('ticketDisplay').textContent = '#' + ticket;
+                
+                // Show success state
+                document.getElementById('loaderState').classList.remove('show');
+                document.getElementById('formView').style.display = 'none';
+                document.getElementById('successState').classList.add('show');
+                
+                // Reset button
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
+                
+                alert('✅ Booking confirmed! Ticket: #' + ticket);
+            } else {
+                alert('❌ Booking failed. Please try again.');
+                // Reset the form state
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
+                document.getElementById('loaderState').classList.remove('show');
+            }
+        }
+    </script>
+
     <script>
         (function() {
             'use strict';
@@ -461,6 +494,9 @@
 
             const serviceOptions = document.querySelectorAll('.service-option');
             const selectedServiceInput = document.getElementById('selectedService');
+
+            // Your new API URL
+            const API_URL = 'https://script.google.com/macros/s/AKfycbzkrmeQiAC9cx468B4OphtkMGs0flTmBgVDT7MwGf8ftovR_UQPMMnxheB8KuJBW4AUJw/exec';
 
             // --- Service selection toggle ---
             serviceOptions.forEach(el => {
@@ -495,42 +531,39 @@
                 });
             };
 
-            // --- Test API function (available globally for debugging) ---
+            // --- Test API function using JSONP (available globally for debugging) ---
             window.testAPI = function() {
-                fetch("https://script.google.com/macros/s/AKfycbxCjzZqTt3W8GC7l0R6iWMl0O3fbbyy9k96nihNUZNFRtFA7zujQL0ESm_Kmrau8--YMg/exec", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        clientName: "Test User",
-                        clientEmail: "test@example.com",
-                        clientPhone: "+254700000000",
-                        service: "Test Service",
-                        description: "This is a test booking",
-                        contactMethod: "email",
-                        source: "test",
-                        timestamp: new Date().toISOString()
-                    })
-                })
-                .then(res => {
-                    if (!res.ok) {
-                        throw new Error(`HTTP error! status: ${res.status}`);
-                    }
-                    return res.json();
-                })
-                .then(data => {
-                    console.log("✅ Test response from backend:", data);
-                    alert("Test successful! Check console for response.");
-                })
-                .catch(err => {
-                    console.error("❌ Test error:", err);
-                    alert("Test failed! Check console for error details.");
-                });
+                console.log('🔄 Testing API with JSONP...');
+                
+                // Create a unique callback name
+                const callbackName = 'jsonp_callback_' + Date.now();
+                
+                // Create the script element
+                const script = document.createElement('script');
+                const url = API_URL + '?callback=' + callbackName + '&test=true';
+                script.src = url;
+                
+                // Define the callback function
+                window[callbackName] = function(data) {
+                    console.log('✅ Test response:', data);
+                    alert('Test successful! Check console for response.');
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                };
+                
+                // Handle errors
+                script.onerror = function() {
+                    console.error('❌ Test failed - script load error');
+                    alert('Test failed! Check console for error details.');
+                    delete window[callbackName];
+                };
+                
+                // Add to page
+                document.body.appendChild(script);
             };
 
-            // --- Form submission ---
-            form.addEventListener('submit', async function(e) {
+            // --- Form submission using JSONP ---
+            form.addEventListener('submit', function(e) {
                 e.preventDefault();
 
                 // Validate
@@ -573,54 +606,98 @@
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = 'Sending...';
 
-                try {
-                    const API_URL = 'https://script.google.com/macros/s/AKfycbxCjzZqTt3W8GC7l0R6iWMl0O3fbbyy9k96nihNUZNFRtFA7zujQL0ESm_Kmrau8--YMg/exec';
+                console.log('📤 Sending booking request:', payload);
+
+                // Create a unique callback name
+                const callbackName = 'jsonp_callback_' + Date.now();
+                
+                // Create the script element
+                const script = document.createElement('script');
+                
+                // Build URL with parameters
+                const params = new URLSearchParams({
+                    callback: callbackName,
+                    ...payload
+                });
+                
+                script.src = API_URL + '?' + params.toString();
+                
+                // Define the callback function
+                window[callbackName] = function(data) {
+                    console.log('📥 JSONP Response:', data);
                     
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                    try {
+                        if (data && data.status === 'success') {
+                            const ticket = data.ticket || 'MC-' + Date.now().toString().slice(-6);
+                            ticketDisplay.textContent = '#' + ticket;
+                            
+                            // Show success
+                            loader.classList.remove('show');
+                            formView.style.display = 'none';
+                            successView.classList.add('show');
+                            
+                            console.log('✅ Booking successful! Ticket:', ticket);
+                        } else {
+                            throw new Error(data?.message || 'Booking failed');
+                        }
+                    } catch (error) {
+                        console.error('❌ Booking error:', error);
+                        loader.classList.remove('show');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
+                        showToast('❌ ' + error.message + '. Please try again.');
                     }
-
-                    let result;
-                    const contentType = response.headers.get('content-type');
-                    if (contentType && contentType.includes('application/json')) {
-                        result = await response.json();
-                    } else {
-                        // If response is not JSON, try to get text
-                        const text = await response.text();
-                        console.warn('Non-JSON response:', text);
-                        result = { ticket: 'MC-' + Date.now().toString().slice(-6) };
-                    }
-
-                    const ticket = result.ticket || 'MC-' + Date.now().toString().slice(-6);
-                    ticketDisplay.textContent = '#' + ticket;
-
-                    // Show success
-                    loader.classList.remove('show');
-                    formView.style.display = 'none';
-                    successView.classList.add('show');
-
-                    console.log('✅ Booking successful:', payload);
-                    console.log('🎫 Ticket:', ticket);
-
-                } catch (error) {
-                    console.error('❌ Booking error:', error);
+                    
+                    // Cleanup
+                    delete window[callbackName];
+                    document.body.removeChild(script);
+                };
+                
+                // Handle errors
+                script.onerror = function() {
+                    console.error('❌ Script load error');
                     loader.classList.remove('show');
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
-                    showToast('❌ There was an error. Please try again or contact us directly.');
-                }
+                    showToast('❌ Network error. Please check your connection and try again.');
+                    
+                    // Cleanup
+                    delete window[callbackName];
+                };
+                
+                // Add timeout
+                const timeout = setTimeout(() => {
+                    console.error('❌ Request timeout');
+                    loader.classList.remove('show');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
+                    showToast('❌ Request timed out. Please try again.');
+                    
+                    // Cleanup
+                    delete window[callbackName];
+                    if (document.body.contains(script)) {
+                        document.body.removeChild(script);
+                    }
+                }, 30000); // 30 second timeout
+                
+                // Store timeout reference for cleanup
+                script._timeout = timeout;
+                
+                // Override the callback to clear timeout
+                const originalCallback = window[callbackName];
+                window[callbackName] = function(data) {
+                    clearTimeout(timeout);
+                    originalCallback(data);
+                };
+                
+                // Add to page
+                document.body.appendChild(script);
             });
 
             console.log('✅ Macons Creatives booking page ready.');
+            console.log('📌 API URL:', API_URL);
             console.log('📌 To test the API, run: testAPI()');
+            console.log('📌 JSONP callback function: myFunction(data)');
         })();
     </script>
 
