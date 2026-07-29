@@ -357,17 +357,17 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Full Name <span class="required">*</span></label>
-                        <input type="text" id="fullName" placeholder="e.g. John Doe" required />
+                        <input type="text" id="fullName" name="clientName" placeholder="e.g. John Doe" required />
                     </div>
                     <div class="form-group">
                         <label>Email Address <span class="required">*</span></label>
-                        <input type="email" id="emailAddress" placeholder="john@example.com" required />
+                        <input type="email" id="emailAddress" name="clientEmail" placeholder="john@example.com" required />
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Phone Number <span class="required">*</span></label>
-                    <input type="tel" id="phoneNumber" placeholder="+254 700 000 000" required />
+                    <input type="tel" id="phoneNumber" name="clientPhone" placeholder="+254 700 000 000" required />
                 </div>
 
                 <div class="form-group">
@@ -398,17 +398,17 @@
                             <span class="price-tag">KES 5,000</span>
                         </div>
                     </div>
-                    <input type="hidden" id="selectedService" value="" />
+                    <input type="hidden" id="selectedService" name="service" value="" />
                 </div>
 
                 <div class="form-group">
                     <label>Project Description</label>
-                    <textarea id="projectDesc" placeholder="Tell us about your project, timeline, and any specific requirements..."></textarea>
+                    <textarea id="projectDesc" name="description" placeholder="Tell us about your project, timeline, and any specific requirements..."></textarea>
                 </div>
 
                 <div class="form-group">
                     <label>Preferred Contact Method</label>
-                    <select id="contactMethod">
+                    <select id="contactMethod" name="contactMethod">
                         <option value="email">Email</option>
                         <option value="phone">Phone Call</option>
                         <option value="whatsapp">WhatsApp</option>
@@ -450,16 +450,18 @@
     <!-- JSONP CALLBACK FUNCTION                   -->
     <!-- ========================================== -->
     <script>
-        // This function will be called automatically by the backend response
-        function myFunction(data) {
-            console.log("✅ JSONP Response from backend:", data);
+        // Global callback function for JSONP responses
+        function myFunction(response) {
+            console.log("✅ JSONP Response received:", response);
             
-            if (data && data.status === 'success') {
-                const ticket = data.ticket || 'MC-' + Date.now().toString().slice(-6);
+            // Hide loader
+            document.getElementById('loaderState').classList.remove('show');
+            
+            if (response && response.status === 'success') {
+                const ticket = response.ticket || 'MC-' + Date.now().toString().slice(-6);
                 document.getElementById('ticketDisplay').textContent = '#' + ticket;
                 
                 // Show success state
-                document.getElementById('loaderState').classList.remove('show');
                 document.getElementById('formView').style.display = 'none';
                 document.getElementById('successState').classList.add('show');
                 
@@ -468,18 +470,29 @@
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
                 
-                alert('✅ Booking confirmed! Ticket: #' + ticket);
+                console.log('✅ Booking confirmed! Ticket:', ticket);
             } else {
-                alert('❌ Booking failed: ' + (data?.message || 'Unknown error'));
-                // Reset the form state
+                const errorMsg = response?.message || 'Booking failed. Please try again.';
+                console.error('❌ Booking error:', errorMsg);
+                
+                // Show error toast
+                const toast = document.getElementById('toast');
+                toast.textContent = '❌ ' + errorMsg;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 5000);
+                
+                // Reset button
                 const submitBtn = document.getElementById('submitBtn');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
-                document.getElementById('loaderState').classList.remove('show');
             }
         }
     </script>
 
+    <!-- ========================================== -->
+    <!-- FORM SUBMISSION - JSONP STYLE             -->
+    <!-- The old fetch() POST method is REMOVED    -->
+    <!-- ========================================== -->
     <script>
         (function() {
             'use strict';
@@ -488,9 +501,6 @@
             const form = document.getElementById('bookingForm');
             const submitBtn = document.getElementById('submitBtn');
             const loader = document.getElementById('loaderState');
-            const formView = document.getElementById('formView');
-            const successView = document.getElementById('successState');
-            const ticketDisplay = document.getElementById('ticketDisplay');
             const toast = document.getElementById('toast');
 
             const serviceOptions = document.querySelectorAll('.service-option');
@@ -521,9 +531,9 @@
                 form.reset();
                 selectedServiceInput.value = '';
                 serviceOptions.forEach(opt => opt.classList.remove('active'));
-                successView.classList.remove('show');
+                document.getElementById('successState').classList.remove('show');
                 loader.classList.remove('show');
-                formView.style.display = 'block';
+                document.getElementById('formView').style.display = 'block';
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
                 document.getElementById('bookingPage').scrollIntoView({
@@ -564,13 +574,12 @@
             };
 
             // ================================================================
-            // FORM SUBMISSION USING JSONP
-            // (The old fetch() POST method has been removed as requested)
+            // FORM SUBMISSION - JSONP STYLE (NO fetch() POST METHOD)
             // ================================================================
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
 
-                // Validate
+                // --- Validate form ---
                 const name = document.getElementById('fullName').value.trim();
                 const email = document.getElementById('emailAddress').value.trim();
                 const phone = document.getElementById('phoneNumber').value.trim();
@@ -593,56 +602,59 @@
                     return;
                 }
 
-                // Show loader
+                // --- Show loader ---
                 loader.classList.add('show');
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = 'Sending...';
 
-                console.log('📤 Sending booking request via JSONP...');
-
-                // Build the data object
-                const payload = {
-                    clientName: name,
-                    clientEmail: email,
-                    clientPhone: phone,
-                    service: service,
+                // --- Collect form data ---
+                const formData = {
+                    clientName: document.getElementById('fullName').value.trim(),
+                    clientEmail: document.getElementById('emailAddress').value.trim(),
+                    clientPhone: document.getElementById('phoneNumber').value.trim(),
+                    service: selectedServiceInput.value,
                     description: document.getElementById('projectDesc').value.trim(),
                     contactMethod: document.getElementById('contactMethod').value,
                     source: 'macons-booking-page',
                     timestamp: new Date().toISOString()
                 };
 
+                console.log('📤 Sending booking request via JSONP...', formData);
+
+                // --- Build JSONP request ---
                 // Create a unique callback name
                 const callbackName = 'jsonp_callback_' + Date.now();
                 
                 // Create the script element
                 const script = document.createElement('script');
                 
-                // Build URL with parameters - using GET method for JSONP
+                // Build URL with all form data as parameters
                 const params = new URLSearchParams({
                     callback: callbackName
                 });
                 
-                // Add all payload data as URL parameters
-                Object.keys(payload).forEach(key => {
-                    params.append(key, payload[key]);
+                // Add all form data as URL parameters
+                Object.keys(formData).forEach(key => {
+                    params.append(key, formData[key]);
                 });
                 
                 script.src = API_URL + '?' + params.toString();
                 
-                // Define the callback function
+                // --- Define the callback function ---
                 window[callbackName] = function(data) {
                     console.log('📥 JSONP Response:', data);
+                    
+                    // Hide loader
+                    loader.classList.remove('show');
                     
                     try {
                         if (data && data.status === 'success') {
                             const ticket = data.ticket || 'MC-' + Date.now().toString().slice(-6);
-                            ticketDisplay.textContent = '#' + ticket;
+                            document.getElementById('ticketDisplay').textContent = '#' + ticket;
                             
                             // Show success
-                            loader.classList.remove('show');
-                            formView.style.display = 'none';
-                            successView.classList.add('show');
+                            document.getElementById('formView').style.display = 'none';
+                            document.getElementById('successState').classList.add('show');
                             
                             console.log('✅ Booking successful! Ticket:', ticket);
                         } else {
@@ -650,11 +662,12 @@
                         }
                     } catch (error) {
                         console.error('❌ Booking error:', error);
-                        loader.classList.remove('show');
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
                         showToast('❌ ' + error.message + '. Please try again.');
                     }
+                    
+                    // Reset button
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
                     
                     // Cleanup
                     delete window[callbackName];
@@ -663,7 +676,7 @@
                     }
                 };
                 
-                // Handle errors
+                // --- Handle errors ---
                 script.onerror = function() {
                     console.error('❌ Script load error - network issue');
                     loader.classList.remove('show');
@@ -678,7 +691,7 @@
                     }
                 };
                 
-                // Add timeout
+                // --- Add timeout ---
                 const timeout = setTimeout(() => {
                     console.error('❌ Request timeout');
                     loader.classList.remove('show');
@@ -703,7 +716,7 @@
                     originalCallback(data);
                 };
                 
-                // Add to page - this triggers the JSONP request
+                // --- Add script to page (triggers the JSONP request) ---
                 document.body.appendChild(script);
             });
 
@@ -711,15 +724,9 @@
             console.log('📌 API URL:', API_URL);
             console.log('📌 To test the API, run: testAPI()');
             console.log('📌 JSONP callback function: myFunction(data)');
-            console.log('📌 Old fetch() POST method has been removed - using JSONP now');
+            console.log('📌 Old fetch() POST method has been REMOVED - using JSONP now');
         })();
     </script>
-
-    <!-- ========================================== -->
-    <!-- JSONP CALL TO BACKEND                      -->
-    <!-- This loads the backend and calls myFunction -->
-    <!-- ========================================== -->
-    <script src="https://script.google.com/macros/s/AKfycbzkrmeQiAC9cx468B4OphtkMGs0flTmBgVDT7MwGf8ftovR_UQPMMnxheB8KuJBW4AUJw/exec?callback=myFunction"></script>
 
 </body>
 </html>
