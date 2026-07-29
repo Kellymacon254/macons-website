@@ -588,5 +588,26 @@
     </script>
 
 </body>
+<button onclick="testAPI()">Test API</button>
+
+<script>
+function testAPI() {
+  fetch("https://script.google.com/macros/s/AKfycbxCjzZqTt3W8GC7l0R6iWMl0O3fbbyy9k96nihNUZNFRtFA7zujQL0ESm_Kmrau8--YMg/exec", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      clientName: "Test User",
+      clientEmail: "test@example.com",
+      clientPhone: "0712345678",
+      service: "Test Service",
+      description: "Testing API connection",
+      contactMethod: "email"
+    })
+  })
+  .then(res => res.text())
+  .then(data => console.log("Response from backend:", data))
+  .catch(err => console.error("Error:", err));
+}
+</script>
 
 </html>
