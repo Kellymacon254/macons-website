@@ -446,13 +446,14 @@
     <!-- Toast error -->
     <div class="toast" id="toast"></div>
 
-    <!-- ===== JSONP CALLBACK FUNCTION ===== -->
+    <!-- ========================================== -->
+    <!-- JSONP CALLBACK FUNCTION                   -->
+    <!-- ========================================== -->
     <script>
         // This function will be called automatically by the backend response
         function myFunction(data) {
             console.log("✅ JSONP Response from backend:", data);
             
-            // Handle the response
             if (data && data.status === 'success') {
                 const ticket = data.ticket || 'MC-' + Date.now().toString().slice(-6);
                 document.getElementById('ticketDisplay').textContent = '#' + ticket;
@@ -469,7 +470,7 @@
                 
                 alert('✅ Booking confirmed! Ticket: #' + ticket);
             } else {
-                alert('❌ Booking failed. Please try again.');
+                alert('❌ Booking failed: ' + (data?.message || 'Unknown error'));
                 // Reset the form state
                 const submitBtn = document.getElementById('submitBtn');
                 submitBtn.disabled = false;
@@ -495,7 +496,7 @@
             const serviceOptions = document.querySelectorAll('.service-option');
             const selectedServiceInput = document.getElementById('selectedService');
 
-            // Your new API URL
+            // Your API URL
             const API_URL = 'https://script.google.com/macros/s/AKfycbzkrmeQiAC9cx468B4OphtkMGs0flTmBgVDT7MwGf8ftovR_UQPMMnxheB8KuJBW4AUJw/exec';
 
             // --- Service selection toggle ---
@@ -562,7 +563,10 @@
                 document.body.appendChild(script);
             };
 
-            // --- Form submission using JSONP ---
+            // ================================================================
+            // FORM SUBMISSION USING JSONP
+            // (The old fetch() POST method has been removed as requested)
+            // ================================================================
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
 
@@ -589,7 +593,14 @@
                     return;
                 }
 
-                // Build payload
+                // Show loader
+                loader.classList.add('show');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'Sending...';
+
+                console.log('📤 Sending booking request via JSONP...');
+
+                // Build the data object
                 const payload = {
                     clientName: name,
                     clientEmail: email,
@@ -601,23 +612,20 @@
                     timestamp: new Date().toISOString()
                 };
 
-                // Show loader
-                loader.classList.add('show');
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = 'Sending...';
-
-                console.log('📤 Sending booking request:', payload);
-
                 // Create a unique callback name
                 const callbackName = 'jsonp_callback_' + Date.now();
                 
                 // Create the script element
                 const script = document.createElement('script');
                 
-                // Build URL with parameters
+                // Build URL with parameters - using GET method for JSONP
                 const params = new URLSearchParams({
-                    callback: callbackName,
-                    ...payload
+                    callback: callbackName
+                });
+                
+                // Add all payload data as URL parameters
+                Object.keys(payload).forEach(key => {
+                    params.append(key, payload[key]);
                 });
                 
                 script.src = API_URL + '?' + params.toString();
@@ -650,12 +658,14 @@
                     
                     // Cleanup
                     delete window[callbackName];
-                    document.body.removeChild(script);
+                    if (document.body.contains(script)) {
+                        document.body.removeChild(script);
+                    }
                 };
                 
                 // Handle errors
                 script.onerror = function() {
-                    console.error('❌ Script load error');
+                    console.error('❌ Script load error - network issue');
                     loader.classList.remove('show');
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
@@ -663,6 +673,9 @@
                     
                     // Cleanup
                     delete window[callbackName];
+                    if (document.body.contains(script)) {
+                        document.body.removeChild(script);
+                    }
                 };
                 
                 // Add timeout
@@ -690,7 +703,7 @@
                     originalCallback(data);
                 };
                 
-                // Add to page
+                // Add to page - this triggers the JSONP request
                 document.body.appendChild(script);
             });
 
@@ -698,8 +711,15 @@
             console.log('📌 API URL:', API_URL);
             console.log('📌 To test the API, run: testAPI()');
             console.log('📌 JSONP callback function: myFunction(data)');
+            console.log('📌 Old fetch() POST method has been removed - using JSONP now');
         })();
     </script>
+
+    <!-- ========================================== -->
+    <!-- JSONP CALL TO BACKEND                      -->
+    <!-- This loads the backend and calls myFunction -->
+    <!-- ========================================== -->
+    <script src="https://script.google.com/macros/s/AKfycbzkrmeQiAC9cx468B4OphtkMGs0flTmBgVDT7MwGf8ftovR_UQPMMnxheB8KuJBW4AUJw/exec?callback=myFunction"></script>
 
 </body>
 </html>
