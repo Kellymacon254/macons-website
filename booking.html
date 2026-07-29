@@ -447,17 +447,21 @@
     <div class="toast" id="toast"></div>
 
     <!-- ========================================== -->
-    <!-- JSONP CALLBACK FUNCTION                   -->
+    <!-- JSONP CALLBACK FUNCTION - FIXED!          -->
     <!-- ========================================== -->
     <script>
         // Global callback function for JSONP responses
+        // ✅ FIXED: Proper success handling instead of throwing errors
         function myFunction(response) {
-            console.log("✅ JSONP Response received:", response);
-            
-            // Hide loader
-            document.getElementById('loaderState').classList.remove('show');
-            
-            if (response && response.status === 'success') {
+            console.log("📥 JSONP Response:", response);
+
+            // Hide loader if visible
+            const loader = document.getElementById('loaderState');
+            if (loader) loader.classList.remove('show');
+
+            // Check if response indicates success
+            if (response && response.success) {
+                // Success case
                 const ticket = response.ticket || 'MC-' + Date.now().toString().slice(-6);
                 document.getElementById('ticketDisplay').textContent = '#' + ticket;
                 
@@ -470,10 +474,18 @@
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
                 
+                // Show alert
+                alert("✅ Booking received! Ticket: " + ticket);
                 console.log('✅ Booking confirmed! Ticket:', ticket);
             } else {
+                // Error case
                 const errorMsg = response?.message || 'Booking failed. Please try again.';
                 console.error('❌ Booking error:', errorMsg);
+                
+                // Reset button
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
                 
                 // Show error toast
                 const toast = document.getElementById('toast');
@@ -481,17 +493,14 @@
                 toast.classList.add('show');
                 setTimeout(() => toast.classList.remove('show'), 5000);
                 
-                // Reset button
-                const submitBtn = document.getElementById('submitBtn');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
+                // Show alert
+                alert("❌ Booking failed: " + errorMsg);
             }
         }
     </script>
 
     <!-- ========================================== -->
     <!-- FORM SUBMISSION - JSONP STYLE             -->
-    <!-- The old fetch() POST method is REMOVED    -->
     <!-- ========================================== -->
     <script>
         (function() {
@@ -574,7 +583,7 @@
             };
 
             // ================================================================
-            // FORM SUBMISSION - JSONP STYLE (NO fetch() POST METHOD)
+            // FORM SUBMISSION - JSONP STYLE
             // ================================================================
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -648,7 +657,8 @@
                     loader.classList.remove('show');
                     
                     try {
-                        if (data && data.status === 'success') {
+                        // Check if response indicates success
+                        if (data && data.success) {
                             const ticket = data.ticket || 'MC-' + Date.now().toString().slice(-6);
                             document.getElementById('ticketDisplay').textContent = '#' + ticket;
                             
@@ -657,12 +667,17 @@
                             document.getElementById('successState').classList.add('show');
                             
                             console.log('✅ Booking successful! Ticket:', ticket);
+                            alert("✅ Booking received! Ticket: " + ticket);
                         } else {
-                            throw new Error(data?.message || 'Booking failed');
+                            const errorMsg = data?.message || 'Booking failed';
+                            console.error('❌ Booking error:', errorMsg);
+                            showToast('❌ ' + errorMsg + '. Please try again.');
+                            alert("❌ Booking failed: " + errorMsg);
                         }
                     } catch (error) {
                         console.error('❌ Booking error:', error);
                         showToast('❌ ' + error.message + '. Please try again.');
+                        alert("❌ Booking failed: " + error.message);
                     }
                     
                     // Reset button
@@ -683,6 +698,7 @@
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
                     showToast('❌ Network error. Please check your connection and try again.');
+                    alert("❌ Booking failed: Network error. Please check your connection.");
                     
                     // Cleanup
                     delete window[callbackName];
@@ -698,6 +714,7 @@
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
                     showToast('❌ Request timed out. Please try again.');
+                    alert("❌ Booking failed: Request timed out.");
                     
                     // Cleanup
                     delete window[callbackName];
@@ -724,7 +741,6 @@
             console.log('📌 API URL:', API_URL);
             console.log('📌 To test the API, run: testAPI()');
             console.log('📌 JSONP callback function: myFunction(data)');
-            console.log('📌 Old fetch() POST method has been REMOVED - using JSONP now');
         })();
     </script>
 
