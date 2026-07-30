@@ -386,7 +386,7 @@
 <div class="toast" id="toast"></div>
 
 <!-- ========================================== -->
-<!-- UPDATED JAVASCRIPT WITH NEW URL           -->
+<!-- SIMPLIFIED JAVASCRIPT WITH FETCH()        -->
 <!-- ========================================== -->
 <script>
     (function() {
@@ -439,9 +439,9 @@
         };
 
         // ============================================================
-        // FORM SUBMISSION - USING JSONP WITH YOUR NEW URL
+        // FORM SUBMISSION - USING FETCH() POST
         // ============================================================
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
             // --- Validate ---
@@ -472,107 +472,49 @@
                 timestamp: new Date().toISOString()
             };
 
-            console.log('📤 Sending booking request via JSONP...', payload);
+            console.log('📤 Sending booking request...', payload);
 
-            // --- JSONP Request ---
-            const callbackName = 'jsonp_callback_' + Date.now();
-            const script = document.createElement('script');
-            
-            // Build URL with parameters
-            const params = new URLSearchParams({ callback: callbackName });
-            Object.keys(payload).forEach(key => params.append(key, payload[key]));
-            script.src = API_URL + '?' + params.toString();
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
 
-            // --- JSONP Callback ---
-            window[callbackName] = function(data) {
-                console.log('📥 JSONP Response:', data);
-                
-                loader.classList.remove('show');
-                
-                try {
-                    if (data && data.status === 'success') {
-                        const ticket = data.ticket || 'MC-' + Date.now().toString().slice(-6);
-                        ticketDisplay.textContent = '#' + ticket;
-                        formView.style.display = 'none';
-                        successView.classList.add('show');
-                        console.log('✅ Booking successful! Ticket:', ticket);
-                    } else {
-                        throw new Error(data?.message || 'Booking failed');
-                    }
-                } catch (error) {
-                    console.error('❌ Booking error:', error);
-                    showToast('❌ ' + error.message + '. Please try again.');
+                // Check if response is OK
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
-                delete window[callbackName];
-                if (document.body.contains(script)) document.body.removeChild(script);
-            };
 
-            // --- Error handling ---
-            script.onerror = function() {
-                console.error('❌ Script load error');
+                // Parse response
+                const data = await response.json();
+                console.log('📥 Response:', data);
+
+                if (data && data.status === 'success') {
+                    const ticket = data.ticket || 'MC-' + Date.now().toString().slice(-6);
+                    ticketDisplay.textContent = '#' + ticket;
+                    formView.style.display = 'none';
+                    successView.classList.add('show');
+                    console.log('✅ Booking successful! Ticket:', ticket);
+                } else {
+                    throw new Error(data?.message || 'Booking failed');
+                }
+
+            } catch (error) {
+                console.error('❌ Booking error:', error);
+                showToast('❌ ' + error.message + '. Please try again.');
+            } finally {
                 loader.classList.remove('show');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
-                showToast('❌ Network error. Please check your connection.');
-                delete window[callbackName];
-                if (document.body.contains(script)) document.body.removeChild(script);
-            };
-
-            // --- Timeout ---
-            const timeout = setTimeout(() => {
-                console.error('❌ Request timeout');
-                loader.classList.remove('show');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
-                showToast('❌ Request timed out. Please try again.');
-                delete window[callbackName];
-                if (document.body.contains(script)) document.body.removeChild(script);
-            }, 30000);
-
-            // Cleanup timeout on callback
-            const originalCallback = window[callbackName];
-            window[callbackName] = function(data) {
-                clearTimeout(timeout);
-                originalCallback(data);
-            };
-
-            // --- Send request ---
-            document.body.appendChild(script);
+            }
         });
 
         console.log('✅ Macons Creatives booking page ready.');
         console.log('📌 API URL:', API_URL);
-        console.log('📌 To test the API, run: testAPI()');
     })();
-
-    // --- Test function for the new URL ---
-    function testAPI() {
-        const API_URL = 'https://script.google.com/macros/s/AKfycbx4UjukF3xnobVFQp4XVP3YS2njtWiOjAaYgaxkhawF-pgPi1WncHr8vYu2sAfxxylF5g/exec';
-        
-        fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                clientName: "Test User",
-                clientEmail: "test@example.com",
-                clientPhone: "+254700000000",
-                service: "Test Service",
-                test: true
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log("✅ Test Response:", data);
-            alert("API Test Successful! Check console.");
-        })
-        .catch(err => {
-            console.error("❌ Test Failed:", err);
-            alert("API Test Failed! Check console.");
-        });
-    }
 </script>
 
 </body>
