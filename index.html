@@ -386,14 +386,15 @@
 <div class="toast" id="toast"></div>
 
 <!-- ========================================== -->
-<!-- SIMPLIFIED JAVASCRIPT WITH FETCH()        -->
+<!-- JSONP JAVASCRIPT - CORS COMPLIANT          -->
+<!-- (fetch() removed - causes CORS errors)    -->
 <!-- ========================================== -->
 <script>
     (function() {
         'use strict';
 
         // ============================================================
-        // ✅ YOUR UPDATED APPS SCRIPT URL
+        // ✅ YOUR APPS SCRIPT URL
         // ============================================================
         const API_URL = 'https://script.google.com/macros/s/AKfycbx4UjukF3xnobVFQp4XVP3YS2njtWiOjAaYgaxkhawF-pgPi1WncHr8vYu2sAfxxylF5g/exec';
 
@@ -439,9 +440,9 @@
         };
 
         // ============================================================
-        // FORM SUBMISSION - USING FETCH() POST
+        // FORM SUBMISSION - JSONP (bypasses CORS)
         // ============================================================
-        form.addEventListener('submit', async function(e) {
+        form.addEventListener('submit', function(e) {
             e.preventDefault();
 
             // --- Validate ---
@@ -472,47 +473,80 @@
                 timestamp: new Date().toISOString()
             };
 
-            console.log('📤 Sending booking request...', payload);
+            console.log('📤 Sending booking request via JSONP...', payload);
 
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                });
+            // --- JSONP Request (bypasses CORS) ---
+            const callbackName = 'jsonp_callback_' + Date.now();
+            const script = document.createElement('script');
+            
+            // Build URL with parameters
+            const params = new URLSearchParams({ callback: callbackName });
+            Object.keys(payload).forEach(key => params.append(key, payload[key]));
+            script.src = API_URL + '?' + params.toString();
 
-                // Check if response is OK
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                // Parse response
-                const data = await response.json();
-                console.log('📥 Response:', data);
-
-                if (data && data.status === 'success') {
-                    const ticket = data.ticket || 'MC-' + Date.now().toString().slice(-6);
-                    ticketDisplay.textContent = '#' + ticket;
-                    formView.style.display = 'none';
-                    successView.classList.add('show');
-                    console.log('✅ Booking successful! Ticket:', ticket);
-                } else {
-                    throw new Error(data?.message || 'Booking failed');
-                }
-
-            } catch (error) {
-                console.error('❌ Booking error:', error);
-                showToast('❌ ' + error.message + '. Please try again.');
-            } finally {
+            // --- JSONP Callback ---
+            window[callbackName] = function(data) {
+                console.log('📥 JSONP Response:', data);
+                
                 loader.classList.remove('show');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
-            }
+                
+                try {
+                    if (data && data.status === 'success') {
+                        const ticket = data.ticket || 'MC-' + Date.now().toString().slice(-6);
+                        ticketDisplay.textContent = '#' + ticket;
+                        formView.style.display = 'none';
+                        successView.classList.add('show');
+                        console.log('✅ Booking successful! Ticket:', ticket);
+                    } else {
+                        throw new Error(data?.message || 'Booking failed');
+                    }
+                } catch (error) {
+                    console.error('❌ Booking error:', error);
+                    showToast('❌ ' + error.message + '. Please try again.');
+                }
+                
+                // Cleanup
+                delete window[callbackName];
+                if (document.body.contains(script)) document.body.removeChild(script);
+            };
+
+            // --- Error handling ---
+            script.onerror = function() {
+                console.error('❌ Script load error (network/CORS)');
+                loader.classList.remove('show');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
+                showToast('❌ Network error. Please check your connection.');
+                delete window[callbackName];
+                if (document.body.contains(script)) document.body.removeChild(script);
+            };
+
+            // --- Timeout ---
+            const timeout = setTimeout(() => {
+                console.error('❌ Request timeout');
+                loader.classList.remove('show');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Booking Request';
+                showToast('❌ Request timed out. Please try again.');
+                delete window[callbackName];
+                if (document.body.contains(script)) document.body.removeChild(script);
+            }, 30000);
+
+            // Cleanup timeout on callback
+            const originalCallback = window[callbackName];
+            window[callbackName] = function(data) {
+                clearTimeout(timeout);
+                originalCallback(data);
+            };
+
+            // --- Send request (bypasses CORS) ---
+            document.body.appendChild(script);
         });
 
         console.log('✅ Macons Creatives booking page ready.');
+        console.log('📌 Using JSONP to bypass CORS');
         console.log('📌 API URL:', API_URL);
     })();
 </script>
