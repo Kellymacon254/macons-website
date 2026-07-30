@@ -72,6 +72,106 @@
     .nav-link:hover::after {
         width: 100%;
     }
+
+    /* Book a Service Button Styles */
+    .book-service-btn {
+        display: inline-block;
+        padding: 14px 32px;
+        background: linear-gradient(135deg, #00c853, #00e676, #00c853);
+        background-size: 200% 200%;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 700;
+        border-radius: 12px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 200, 83, 0.4);
+        animation: shimmer 3s ease-in-out infinite;
+        letter-spacing: 0.5px;
+    }
+
+    .book-service-btn::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            45deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.15) 50%,
+            transparent 70%
+        );
+        animation: shine 3s ease-in-out infinite;
+        transform: rotate(45deg);
+    }
+
+    .book-service-btn:hover {
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 8px 30px rgba(0, 200, 83, 0.5);
+        background: linear-gradient(135deg, #00e676, #00c853, #00e676);
+        background-size: 200% 200%;
+    }
+
+    .book-service-btn:active {
+        transform: translateY(0px) scale(0.98);
+    }
+
+    .book-service-btn i {
+        margin-right: 10px;
+        animation: pulse-icon 2s ease-in-out infinite;
+    }
+
+    @keyframes shine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        20% { transform: translateX(100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    @keyframes shimmer {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+
+    @keyframes pulse-icon {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+    }
+
+    /* Floating pulse animation for the button container */
+    .btn-wrapper {
+        display: inline-block;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-6px); }
+    }
+
+    /* Badge effect */
+    .book-service-btn .badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background: #ff1744;
+        color: white;
+        font-size: 10px;
+        padding: 3px 8px;
+        border-radius: 20px;
+        font-weight: 600;
+        animation: pulse-badge 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-badge {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
 </style>
 </head> <body class="bg-gray-50"> <!-- Navigation --> <nav class="fixed w-full bg-white shadow-md z-50"> <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> <div class="flex justify-between h-16"> <div class="flex items-center"> <div class="flex-shrink-0 flex items-center"> <span class="text-2xl font-bold gradient-text">MACONS CREATIVES</span> </div> </div> <div class="hidden md:flex items-center space-x-8"> <a href="#home" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Home</a> <a href="#services" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Services</a> <a href="#testimonials" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Testimonials</a> <a href="#contact" class="nav-link text-gray-700 hover:text-blue-600 px-3 py-2 font-medium">Contact</a> <a href="#quote" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full font-medium hover:shadow-lg transition-all duration-300">Get Quote</a> </div> <div class="md:hidden flex items-center"> <button id="menu-btn" class="text-gray-700 hover:text-blue-600 focus:outline-none"> <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path> </svg> </button> </div> </div> </div>
     <!-- Mobile menu -->
@@ -104,6 +204,23 @@
                     <a href="#quote" class="bg-white text-gray-800 px-8 py-3 rounded-full font-medium text-center border-2 border-blue-500 hover:bg-blue-50 transition-all duration-300 transform hover:-translate-y-1">
                         Get a Free Quote
                     </a>
+                </div>
+                
+                <!-- ========================================== -->
+                <!-- ✅ BOOK A SERVICE BUTTON - ATTRACTIVE & COLORFUL -->
+                <!-- ========================================== -->
+                <div class="mt-8">
+                    <div class="btn-wrapper">
+                        <a href="booking.html" class="book-service-btn">
+                            <i class="fas fa-calendar-check"></i> 
+                            Book a Service
+                            <span class="badge">NEW</span>
+                        </a>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-3 flex items-center gap-2">
+                        <i class="fas fa-clock text-green-500"></i> 
+                        Quick booking • 24hr response • Secure
+                    </p>
                 </div>
             </div>
             <div class="md:w-1/2 flex justify-center">
